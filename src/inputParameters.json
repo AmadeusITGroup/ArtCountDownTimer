@@ -1,0 +1,195 @@
+{
+  "PI_1": {
+    "startDate":"2025-06-23",
+    "endDate":"2025-08-15",
+    "PI_PlanningAndInnovation": [
+      {
+        "name": "Planning",
+        "description": "",
+        "durationWeeks": 1,
+        "startDate": "2025-06-23",
+        "endDate": "2025-07-04",
+        "activities": [
+          {
+            "day": "1",
+            "name": "System Demo and Inspect & Adapt",
+            "sessions": [
+              {
+                "name": "System Demo",
+                "description": "Review the current state of the system and identify areas for improvement.",
+                "startDate": "2025-06-23T08:00:00",
+                "endDate": "2025-06-23T10:00:00"
+              },
+              {
+                "name": "Inspect & Adapt",
+                "description": "Review and demonstrate the system and identify areas for improvement.",
+                "startDate": "2025-06-23T16:00:00",
+                "endDate": "2025-06-23T17:00:00"
+              }
+            ]
+          },
+          {
+            "day": "2",
+            "name": "PI Planning - Context Setting",
+            "sessions": [
+              {
+                "name": "Business Context",
+                "description": "Business leaders present the context and objectives.",
+                "startDate": "2025-06-24T08:00:00",
+                "endDate": "2025-06-24T09:00:00"
+              },
+              {
+                "name": "Product Solution/Vision",
+                "description": "Product Owners and Solution Architects share the vision and key solutions.",
+                "startDate": "2025-06-24T09:00:00",
+                "endDate": "2025-06-24T10:30:00"
+              },
+              {
+                "name": "Architecture Vision and Development Practices",
+                "description": "Technical leaders provide architectural and development practice guidance.",
+                "startDate": "2025-06-24T11:15:00",
+                "endDate": "2025-06-24T12:00:00"
+              },
+              {
+                "name": "Planning Context + Q&A",
+                "description": "Teams discuss the planning approach and address open questions.",
+                "startDate": "2025-06-24T12:00:00",
+                "endDate": "2025-06-24T13:00:00"
+              },
+              {
+                "name": "Team Break",
+                "description": "Teams create draft plans, identify dependencies, and highlight risks.",
+                "startDate": "2025-06-24T21:10:00",
+                "endDate": "2025-06-24T22:00:00"
+              }
+            ]
+          },
+          {
+            "day": "3",
+            "name": "PI Planning - Team Collaboration",
+            "sessions": [
+              {
+                "name": "Team Breakouts",
+                "description": "Continue refining plans and resolving dependencies.",
+                "startDate": "2025-06-25T08:00:00",
+                "endDate": "2025-06-25T11:00:00"
+              },
+              {
+                "name": "Team Sync + Coach Sync",
+                "description": "Teams and coaches align plans and dependencies.",
+                "startDate": "2025-06-25T11:00:00",
+                "endDate": "2025-06-25T13:00:00"
+              },
+              {
+                "name": "Draft Plan Review",
+                "description": "Review draft plans and align with leadership.",
+                "startDate": "2025-06-25T13:00:00",
+                "endDate": "2025-06-25T14:30:00"
+              },
+              {
+                "name": "Management Review and Planning Adjustments",
+                "description": "Leadership reviews plans and provides feedback.",
+                "startDate": "2025-06-25T14:30:00",
+                "endDate": "2025-06-25T16:30:00"
+              },
+              {
+                "name": "Team Sync/Breakout/3 Amigos Preparation",
+                "description": "Prepare for the final day and ensure alignment.",
+                "startDate": "2025-06-25T16:30:00",
+                "endDate": "2025-06-25T17:00:00"
+              }
+            ]
+          },
+          {
+            "day": "4",
+            "name": "PI Planning - Final Adjustments",
+            "sessions": [
+              {
+                "name": "Team Breakouts",
+                "description": "Finalize team plans and dependencies.",
+                "startDate": "2025-06-26T08:00:00",
+                "endDate": "2025-06-26T11:00:00"
+              },
+              {
+                "name": "Team Sync + Coach Sync",
+                "description": "Teams and coaches align on adjustments.",
+                "startDate": "2025-06-26T11:00:00",
+                "endDate": "2025-06-26T13:00:00"
+              },
+              {
+                "name": "Final Team Breakout/BO Tour",
+                "description": "Ensure all teams have aligned plans for final review.",
+                "startDate": "2025-06-26T13:00:00",
+                "endDate": "2025-06-26T14:30:00"
+              },
+              {
+                "name": "Team Sync/Standard Business",
+                "description": "Address open business or technical items.",
+                "startDate": "2025-06-26T14:30:00",
+                "endDate": "2025-06-26T16:30:00"
+              }
+            ]
+          },
+          {
+            "day": "5",
+            "name": "PI Planning - Conclusion",
+            "sessions": [
+              {
+                "name": "Final Plan Review",
+                "description": "Finalize and review all team plans with leadership.",
+                "startDate": "2025-06-27T08:00:00",
+                "endDate": "2025-06-27T10:00:00"
+              },
+              {
+                "description": "Identify risks and vote on confidence in the plan.",
+                "name": "ART Risks and Confidence Vote",
+                "startDate": "2025-06-27T10:00:00",
+                "endDate": "2025-06-27T10:15:00"
+              },
+              {
+                "description": "Discuss learnings from planning and next steps.",
+                "name": "Planning Retrospective and Moving Forward",
+                "startDate": "2025-06-27T13:00:00",
+                "endDate": "2025-06-27T18:30:00"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Innovation Week",
+        "description": "A dedicated week for innovation, experimentation, and learning.",
+        "durationWeeks": 1,
+        "startDate": "2025-06-30",
+        "endDate": "2025-07-04",
+        "activities": []
+      }
+    ],
+    "PI_Iterations": [
+      {
+        "name": "Iteration 1",
+        "description": "",
+        "durationWeeks": 2,
+        "startDate": "2025-07-07",
+        "endDate": "2025-07-18",
+        "activities": []
+      },
+      {
+        "name": "Iteration 2",
+        "description": "",
+        "durationWeeks": 2,
+        "startDate": "2025-07-21",
+        "endDate": "2025-08-01",
+        "activities": []
+      },
+      {
+        "name": "Iteration 3",
+        "description": "",
+        "durationWeeks": 2,
+        "startDate": "2025-08-04",
+        "endDate": "2025-08-15",
+        "activities": []
+      }
+    ]
+  }
+}

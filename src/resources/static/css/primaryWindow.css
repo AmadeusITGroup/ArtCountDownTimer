@@ -1,0 +1,265 @@
+/**
+ * ART Timer - Primary Window Styles
+ * Custom CSS for the main application window
+ */
+
+/* ===== FONT IMPORTS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* ===== RESET & BASE ELEMENTS ===== */
+* {
+    font-family: "Montserrat", serif;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+}
+
+html {
+    filter: invert(0) hue-rotate(0deg);
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: #EEF6FC;
+}
+
+/* ===== HEADER SECTION ===== */
+.top {
+    height: 15%;
+    width: 100%;
+    color: #FFF;
+    font-weight: bold;
+    user-select: none;
+}
+
+.top img {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition-duration: 0.5s;
+}
+
+.top img:hover {
+    right: 15px;
+    transition-duration: 0.5s;
+}
+
+/* ===== MENU STYLING ===== */
+.top #menu {
+    position: absolute;
+    top: 40%;
+    left: 37%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    z-index: 10;
+}
+
+.top #menu p {
+    margin: 15px 0;
+    transition-duration: 1s;
+}
+
+.top #menu p:hover {
+    color: #0C8DE8;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+/* ===== MAIN CONTENT AREA ===== */
+.bottom {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: #E3E5F2;
+    transition-duration: 0.5s;
+}
+
+.bottom-left {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bottom-right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bottom .timer-description {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #0C8DE8;
+}
+
+#timer1,
+#timer2 {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.bottom-right svg circle[r="150"]:hover {
+    filter: brightness(0.9);
+    cursor: pointer;
+}
+
+/* ===== TIMER DESCRIPTION STYLES ===== */
+.timer-description {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 15ch;
+    /* Limit to 15 characters */
+    cursor: pointer;
+}
+
+.timer-description:hover {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: unset;
+    max-width: unset;
+    font-size: 1.8rem;
+}
+
+/* ===== DETAIL VIEW ===== */
+.detail {
+    height: 80%;
+    display: none;
+    flex-direction: column;
+}
+
+.detail-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.detail .detail-top p {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #0C8DE8;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+.detail .detail-top p:hover {
+    color: #7dc9ff;
+    letter-spacing: 2px;
+    transition-duration: 0.5s;
+}
+
+.detail-bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-left: 15px;
+    overflow-y: auto;
+    text-align: center;
+}
+
+/* ===== DETAIL CARD COMPONENTS ===== */
+.detail-bottom .each-detail {
+    margin: 20px 0;
+    width: 80%;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: -1px 1px 20px 13px #0c8de80d;
+}
+
+.detail .detail-bottom .each-detail>p {
+    padding: 10px 0 10px 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #0C8DE8;
+    color: white;
+    border-bottom: 1px solid #0C8DE8;
+}
+
+.detail .detail-bottom .each-detail .session {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-family: "Roboto", serif;
+}
+
+.each-session-inside {
+    margin: 10px;
+    width: 100%;
+    padding: 8px;
+}
+
+.detail .detail-bottom .each-detail .session .each-session {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.detail .detail-bottom .each-detail .session .each-session .each-session-header {
+    position: relative;
+    padding: 10px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0C8DE8;
+    cursor: pointer;
+}
+
+/* ===== TOOLTIP COMPONENTS ===== */
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+    bottom: 90%;
+    left: 50%;
+    margin-left: -60px;
+    width: 120px;
+    padding: 9px 5px;
+    background-color: #fff;
+    color: #0C8DE8;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 6px;
+    border-bottom: 3px solid #0C8DE8;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+}
+
+.each-session-header:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}

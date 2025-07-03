@@ -1,0 +1,46 @@
+<!--
+  ART Timer - Reminder Window
+  Dialog for setting reminders in the ART timer application
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Reminder</title>
+    <link rel="stylesheet" href="../resources/static/css/reminderWindow.css">
+</head>
+
+<body>
+    <h1>Set Reminder</h1>
+
+    <!-- Input form section -->
+    <div class="inputs">
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message" autofocus>
+
+        <label for="days">Timing:</label>
+        <div class="timing-inputs">
+            <input type="number" id="days" name="days" min="0">
+            <label for="days">D</label>
+
+            <input type="number" id="hours" name="hours" min="0" max="23">
+            <label for="hours">H</label>
+
+            <input type="number" id="minutes" name="minutes" min="0" max="59">
+            <label for="minutes">M</label>
+        </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="buttons">
+        <button id="alertButton">Alert</button>
+        <button id="cancelButton">Cancel</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../scripts/reminderWindow.js"></script>
+</body>
+
+</html>

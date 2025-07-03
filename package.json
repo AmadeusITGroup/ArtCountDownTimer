@@ -1,0 +1,57 @@
+{
+  "name": "art-timer",
+  "version": "1.0.0",
+  "description": "An Electron application for managing ART planning sessions.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron main.js",
+    "build": "electron-builder",
+    "dev": "electron .",
+    "lint": "eslint ."
+  },
+  "build": {
+    "appId": "com.example.arttimer",
+    "productName": "ART Timer",
+    "files": [
+      "main.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "src/inputParameters.json",
+        "to": "inputParameters.json"
+      },
+      {
+        "from": "src/resources/static/img/tray_icon.png",
+        "to": "tray_icon.png"
+      },
+      {
+        "from": "src/resources/static/img/icon.ico",
+        "to": "app_icon.ico"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "src/resources/static/img/icon.ico"
+    }
+  },
+  "author": "Vasukipriya K N",
+  "license": "MIT",
+  "keywords": [
+    "electron",
+    "timer",
+    "planning",
+    "agile",
+    "art"
+  ],
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^26.0.12",
+    "electron-reload": "^2.0.0-alpha.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

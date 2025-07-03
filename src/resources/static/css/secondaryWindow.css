@@ -1,0 +1,98 @@
+/**
+ * ART Timer - Secondary Window Styles
+ * Custom CSS for the secondary application window
+ */
+
+/* ===== FONT IMPORTS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ===== RESET & BASE ELEMENTS ===== */
+* {
+    font-family: "Montserrat", serif;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+}
+
+html {
+    filter: invert(0) hue-rotate(0deg);
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: #E3E5F2;
+}
+
+/* ===== HEADER SECTION ===== */
+.top {
+    height: 15%;
+    width: 100%;
+    color: #FFF;
+    font-weight: bold;
+    user-select: none;
+}
+
+.top img {
+    position: absolute;
+    top: 5px;
+    right: 3px;
+    cursor: pointer;
+    transition-duration: 0.5s;
+}
+
+.top img:hover {
+    transform: translateX(-5px);
+    transition-duration: 0.5s;
+}
+
+/* ===== MENU STYLING ===== */
+.top #menu {
+    position: absolute;
+    top: 30%;
+    left: 26%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    z-index: 10;
+}
+
+.top #menu p {
+    margin: 15px 0;
+    transition-duration: 1s;
+}
+
+.top #menu p:hover {
+    color: #0C8DE8;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+/* ===== MAIN CONTENT AREA ===== */
+.bottom {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #FFF;
+    transition-duration: 0.5s;
+}
+
+/* ===== TIMER DISPLAY ===== */
+.bottom #timer2,
+#timer2 {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    color: #0C8DE8;
+}
