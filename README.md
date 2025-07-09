@@ -66,6 +66,7 @@ ART Timer is a light-weight application designed to help teams track Program Inc
 
     #### Setup
     - Find the **ART Timer Setup 1.0.0.exe** file for the installation.
+    - Check under Releases section to get the latest setup file.
     - After the installation, it will appear under the name **ART Timer**.
     - Once you open the app, initially, it will load an existing JSON file.
     
@@ -73,12 +74,12 @@ ART Timer is a light-weight application designed to help teams track Program Inc
     - Since the app loaded with sample JSON data, it can be configured as per the user needs.
     - For Windows Users: 
         - Navigate to the following directory:  
-            `C:\Users\<your_username>\AppData\Local\Programs\one\resources`
+            `C:\Users\<your_username>\AppData\Local\Programs\art-timer\resources`
         - Replace `<your_username>` with your actual Windows username.
         - Locate the file named `inputParameters.json`.
         - Edit this file as needed, then reopen the app to see the changes.
 
-    - Build for Distribution
+    - Build for Distribution (Optional)
 
         `npm run build`
 
