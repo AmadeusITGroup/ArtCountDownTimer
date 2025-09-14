@@ -1,0 +1,5 @@
+﻿blank_issues_enabled: true
+contact_links:
+  - name: ArtCountDownTimer Documentation
+    url: https://github.com/AmadeusITGroup/ArtCountDownTimer/blob/main/README.md
+    about: Please check the documentation before opening an issue.
