@@ -514,3 +514,13 @@ async function initializeApplication() {
   
 // Initialize the application
 initializeApplication();
+
+// Export the functions
+module.exports = {
+  isAlertSet,
+  formatTimeRemaining,
+  minimizeWindow,
+  maximizeWindow,
+  createSpanTooltipForAlert,
+  generateBellIconSpan
+};

@@ -107,6 +107,10 @@ ART Timer is a light-weight application designed to help teams track Program Inc
 
         `npm start`
 
+    - Test the application:
+
+        `npm test`
+
 ---
 ## Usage
 **Main Interface**
@@ -227,6 +231,8 @@ art-timer/
 ├── package.json          # Project metadata and dependencies
 ├── README.md             # Project documentation
 ├── start-app.bat         # Windows batch script to start the app (DEVELOPMENT)
+├── __mocks__             # Includes mocks configurations used by jest for testing purpose
+├── __tests__             # Includes files for testing using jest
 ├── src/                  # Source code
 │   ├── inputParameters.json         # Configuration file
 │   ├── resources/                   # Static assets
