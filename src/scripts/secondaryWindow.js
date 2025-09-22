@@ -12,7 +12,7 @@ let artStartDate, artEndDate, iterationStartDate, iterationEndDate, piPlanningAn
  */
 async function loadConfigAndInitialize() {
   try {
-    const config = await window.electron.readConfig('/src/inputParameters.json');
+    const config = await window.electron.readConfig("/src/inputParameters.json");
 
     // Parse and assign the dates from config to global variables
     piPlanningAndInnovation = config.PI_1.PI_PlanningAndInnovation;
@@ -23,7 +23,7 @@ async function loadConfigAndInitialize() {
 
     return true;
   } catch (error) {
-    console.error('Error loading config:', error);
+    console.error("Error loading config:", error);
     return false;
   }
 }
@@ -99,7 +99,7 @@ function handleSmallBatchTimer() {
   const currentArtActivity = window.electron.identifyCurrentArtActivity(piPlanningAndInnovation, piIterations);
 
   if (!currentArtActivity) {
-    console.error('Failed to identify the current ART activity.');
+    console.error("Failed to identify the current ART activity.");
     return;
   }
 
@@ -131,7 +131,7 @@ async function initializeApplication() {
   if (isConfigLoaded) {
     handleSmallBatchTimer();
   } else {
-    console.error('Failed to initialize application due to config loading issues.');
+    console.error("Failed to initialize application due to config loading issues.");
   }
 }
 

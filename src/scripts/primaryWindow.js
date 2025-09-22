@@ -14,7 +14,7 @@ let sessionTimers = {};
  */
 async function loadConfigAndInitialize() {
   try {
-    const config = await window.electron.readConfig('/src/inputParameters.json');
+    const config = await window.electron.readConfig("/src/inputParameters.json");
 
     // Parse and assign the dates from config to global variables
     piPlanningAndInnovation = config.PI_1.PI_PlanningAndInnovation;
@@ -24,7 +24,7 @@ async function loadConfigAndInitialize() {
 
     return true;
   } catch (error) {
-    console.error('Error loading config:', error);
+    console.error("Error loading config:", error);
     return false;
   }
 }
@@ -116,39 +116,39 @@ function toggleDetail() {
  * Renders the activity details in the UI
  */
 function renderDetails() {
-  window.electron.readConfig('/src/inputParameters.json')
+  window.electron.readConfig("/src/inputParameters.json")
     .then(jsonData => {
-      document.querySelector('.detail-bottom').innerHTML = ''; // Clear existing content
+      document.querySelector(".detail-bottom").innerHTML = ""; // Clear existing content
       
       const numberOfActivities = jsonData.PI_1.PI_PlanningAndInnovation[0].activities.length;
       for (let i = 0; i < numberOfActivities; i++) {
         const eachActivity = jsonData.PI_1.PI_PlanningAndInnovation[0].activities[i];
-        const eachDetail = document.createElement('div');
-        eachDetail.classList.add('each-detail');
+        const eachDetail = document.createElement("div");
+        eachDetail.classList.add("each-detail");
         
-        const detailHeaderP = document.createElement('p');
+        const detailHeaderP = document.createElement("p");
         const day = eachActivity.day;
         const activityName = eachActivity.name;
         detailHeaderP.textContent = `Day ${day} : ${activityName}`;
-        detailHeaderP.classList.add('each-detail-header');
+        detailHeaderP.classList.add("each-detail-header");
         
-        const sessionDiv = document.createElement('div');
-        sessionDiv.classList.add('session');
-        const eachSessionDiv = document.createElement('div');
-        eachSessionDiv.classList.add('each-session');
+        const sessionDiv = document.createElement("div");
+        sessionDiv.classList.add("session");
+        const eachSessionDiv = document.createElement("div");
+        eachSessionDiv.classList.add("each-session");
  
         const numberOfSessions = eachActivity.sessions.length;
         for (let j = 0; j < numberOfSessions; j++) {
           const eachSession = eachActivity.sessions[j];
-          const sessionHeaderP = document.createElement('p');
-          const eachSessionInsideDiv = document.createElement('div');
-          eachSessionInsideDiv.classList.add('each-session-inside');
+          const sessionHeaderP = document.createElement("p");
+          const eachSessionInsideDiv = document.createElement("div");
+          eachSessionInsideDiv.classList.add("each-session-inside");
           
           sessionHeaderP.textContent = eachSession.name;
-          sessionHeaderP.classList.add('each-session-header');
-          sessionHeaderP.setAttribute('onclick', 'remindMe(this)');
-          sessionHeaderP.setAttribute('data-session-name', eachSession.name);
-          sessionHeaderP.setAttribute('data-session-day', day);
+          sessionHeaderP.classList.add("each-session-header");
+          sessionHeaderP.setAttribute("onclick", "remindMe(this)");
+          sessionHeaderP.setAttribute("data-session-name", eachSession.name);
+          sessionHeaderP.setAttribute("data-session-day", day);
           
           const spanElement = createSpanTooltipForAlert();
           sessionHeaderP.appendChild(spanElement);
@@ -159,9 +159,9 @@ function renderDetails() {
             sessionHeaderP.appendChild(bellSpanElement);
           }
           
-          const countdownBarDiv = document.createElement('div');
-          countdownBarDiv.classList.add('countdown-bar');
-          countdownBarDiv.setAttribute('data-session-id', `session-${i}-${j}`); // Unique ID
+          const countdownBarDiv = document.createElement("div");
+          countdownBarDiv.classList.add("countdown-bar");
+          countdownBarDiv.setAttribute("data-session-id", `session-${i}-${j}`); // Unique ID
           
           const now = new Date();
           const start = new Date(eachSession.startDate);
@@ -194,11 +194,11 @@ function renderDetails() {
         sessionDiv.appendChild(eachSessionDiv);
         eachDetail.appendChild(detailHeaderP);
         eachDetail.appendChild(sessionDiv);
-        document.querySelector('.detail-bottom').appendChild(eachDetail);
+        document.querySelector(".detail-bottom").appendChild(eachDetail);
       }
     })
     .catch(err => {
-      console.error('Error reading JSON file:', err);
+      console.error("Error reading JSON file:", err);
     });
 }
 
@@ -207,9 +207,9 @@ function renderDetails() {
  * @returns {HTMLSpanElement} The created span element
  */
 function createSpanTooltipForAlert() {
-  const span = document.createElement('span');
+  const span = document.createElement("span");
   span.textContent = "Click for Alert";
-  span.classList.add('tooltip');
+  span.classList.add("tooltip");
   return span;
 }
 
@@ -219,7 +219,7 @@ function createSpanTooltipForAlert() {
  * @returns {HTMLSpanElement} The created span element with bell icon
  */
 function generateBellIconSpan(count = 1) {
-  const span = document.createElement('span');
+  const span = document.createElement("span");
   span.textContent = count > 1 ? `🔔×${count}` : "🔔";
   return span;
 }
@@ -378,8 +378,8 @@ function updateCountdowns() {
   for (const sessionId in sessionTimers) {
     const { countdownBarDiv, startTime, endTime } = sessionTimers[sessionId];
     
-    const textElement = countdownBarDiv.querySelector('text');
-    const progressRect = countdownBarDiv.querySelector('rect:nth-child(2)');
+    const textElement = countdownBarDiv.querySelector("text");
+    const progressRect = countdownBarDiv.querySelector("rect:nth-child(2)");
     
     if (!textElement || !progressRect) continue;
     
@@ -394,7 +394,7 @@ function updateCountdowns() {
     // Session hasn't started yet
     if (now < startTime) {
       textElement.textContent = `Starts in ${formatTimeRemaining(startTime - now)} (${totalDurationText})`;
-      textElement.setAttribute('fill', 'white'); // White text on gray background
+      textElement.setAttribute("fill", "white"); // White text on gray background
     } 
     // Session is in progress
     else if (now >= startTime && now <= endTime) {
@@ -403,16 +403,16 @@ function updateCountdowns() {
       const remainingPercentage = (remainingTime / totalDuration) * 100;
       
       textElement.textContent = `${new Date(remainingTime * 1000).toISOString().substr(11, 8)} remaining`;
-      textElement.setAttribute('fill', '#9cd6ff'); // Dark text for visibility
-      progressRect.setAttribute('width', `${remainingPercentage}%`);
-      progressRect.setAttribute('fill', '#0C8DE8'); // Active color
+      textElement.setAttribute("fill", "#9cd6ff"); // Dark text for visibility
+      progressRect.setAttribute("width", `${remainingPercentage}%`);
+      progressRect.setAttribute("fill", "#0C8DE8"); // Active color
     } 
     // Session has ended
     else {
       textElement.textContent = "Completed";
-      textElement.setAttribute('fill', 'white'); // White text on green background
-      progressRect.setAttribute('width', "100%");
-      progressRect.setAttribute('fill', '#28A745');
+      textElement.setAttribute("fill", "white"); // White text on green background
+      progressRect.setAttribute("width", "100%");
+      progressRect.setAttribute("fill", "#28A745");
     }
   }
 }
@@ -422,30 +422,30 @@ function updateCountdowns() {
  * @param {HTMLElement} element - The element that triggered the reminder
  */
 function remindMe(element) {
-  const name = element.getAttribute('data-session-name');
-  const day = element.getAttribute('data-session-day');
+  const name = element.getAttribute("data-session-name");
+  const day = element.getAttribute("data-session-day");
   window.electron.remindMe({ innerText: name }, day);
 }
 
 // Event listener for when a reminder is added
 window.electron.onReminderAdded((text) => {
-  document.querySelectorAll('.each-session-header').forEach((header) => {
+  document.querySelectorAll(".each-session-header").forEach((header) => {
     if (header.innerText === text || header.innerText.startsWith(text + " ")) {
       // Remove any existing bell icons
-      header.querySelectorAll('span').forEach(span => {
+      header.querySelectorAll("span").forEach(span => {
         if (span.textContent.startsWith("🔔")) span.remove();
       });
       // Append bell icon
-      header.innerHTML += '<span>🔔</span>';
+      header.innerHTML += "<span>🔔</span>";
     }
   });
 });
 
 // Event listener for when a reminder is triggered
 window.electron.onReminderTriggered((text) => {
-  document.querySelectorAll('.each-session-header').forEach((header) => {
+  document.querySelectorAll(".each-session-header").forEach((header) => {
     if (header.innerText.includes(text)) {
-      header.innerHTML = header.innerHTML.replace('<span>🔔</span>', '');
+      header.innerHTML = header.innerHTML.replace("<span>🔔</span>", "");
     }
   });
 });
@@ -457,7 +457,7 @@ function handleSmallBatchTimer() {
   const currentArtActivity = window.electron.identifyCurrentArtActivity(piPlanningAndInnovation, piIterations);
 
   if (!currentArtActivity) {
-    console.error('Failed to identify the current ART activity.');
+    console.error("Failed to identify the current ART activity.");
     return;
   }
 
@@ -483,7 +483,7 @@ function mainHandler() {
   const artTotalDays = window.electron.calculateWorkingDays(artStartDate, artEndDate);
 
   if (artTotalDays <= 0) {
-    console.error('Invalid ART dates. Please check the input parameters.');
+    console.error("Invalid ART dates. Please check the input parameters.");
     return;
   }
 
@@ -508,7 +508,7 @@ async function initializeApplication() {
   if (isConfigLoaded) {
     mainHandler(); // Call mainHandler only if the config was loaded successfully
   } else {
-    console.error('Failed to initialize application due to config loading issues.');
+    console.error("Failed to initialize application due to config loading issues.");
   }
 }
   

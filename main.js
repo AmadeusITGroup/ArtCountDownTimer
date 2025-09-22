@@ -1,13 +1,13 @@
 /**
  * ART Timer - Electron application for managing ART planning sessions
  */
-const { app, BrowserWindow, ipcMain, Notification, Tray, Menu } = require('electron');
-const path = require('path');
-const fs = require('fs');
+const { app, BrowserWindow, ipcMain, Notification, Tray, Menu } = require("electron");
+const path = require("path");
+const fs = require("fs");
 
 // Set app ID for Windows notifications
-if (process.platform === 'win32') {
-  app.setAppUserModelId('ART.Timer');
+if (process.platform === "win32") {
+  app.setAppUserModelId("ART.Timer");
 }
 
 const isPackaged = app.isPackaged;
@@ -19,13 +19,13 @@ let secondaryWin;
 
 // Determine the path to the input parameters JSON file
 if (isPackaged) {
-  jsonPath = path.join(process.resourcesPath, 'inputParameters.json');
+  jsonPath = path.join(process.resourcesPath, "inputParameters.json");
 } else {
-  jsonPath = path.join(__dirname, 'src', 'inputParameters.json');
+  jsonPath = path.join(__dirname, "src", "inputParameters.json");
 }
 
 // Load configuration data
-const _data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+const _data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
 
 /**
  * Get the appropriate notification icon path based on environment
@@ -33,25 +33,25 @@ const _data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
  */
 function getNotificationIcon() {
   if (isPackaged) {
-    return path.join(process.resourcesPath, 'app_icon.ico');
+    return path.join(process.resourcesPath, "app_icon.ico");
   } else {
-    return path.join(__dirname, 'src/resources/static/img/icon.ico');
+    return path.join(__dirname, "src/resources/static/img/icon.ico");
   }
 }
 
 // Handle read-config IPC requests
-ipcMain.handle('read-config', (event, filePath) => {
+ipcMain.handle("read-config", (event, filePath) => {
   let configPath;
   if (app.isPackaged) {
-    configPath = path.join(process.resourcesPath, 'inputParameters.json');
+    configPath = path.join(process.resourcesPath, "inputParameters.json");
   } else {
-    configPath = path.join(__dirname, 'src', 'inputParameters.json');
+    configPath = path.join(__dirname, "src", "inputParameters.json");
   }
   
   return new Promise((resolve, reject) => {
-    fs.readFile(configPath, 'utf-8', (err, data) => {
+    fs.readFile(configPath, "utf-8", (err, data) => {
       if (err) {
-        reject('Error reading config file: ' + err);
+        reject("Error reading config file: " + err);
       } else {
         resolve(JSON.parse(data));
       }
@@ -60,18 +60,18 @@ ipcMain.handle('read-config', (event, filePath) => {
 });
 
 // Enable hot reload in development
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   try {
-    require('electron-reload')(__dirname, {
+    require("electron-reload")(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
   } catch (e) {
-    console.log('electron-reload not installed');
+    console.log("electron-reload not installed");
   }
 }
 
 // Disable SMIL animations in SVG
-app.commandLine.appendSwitch('disable-blink-features', 'SVGSMILEnabled');
+app.commandLine.appendSwitch("disable-blink-features", "SVGSMILEnabled");
 
 /**
  * Create the main application window
@@ -83,21 +83,21 @@ function createMainWindow() {
     resizable: false,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: path.join(__dirname, './src/scripts/preload.js'),
+      preload: path.join(__dirname, "./src/scripts/preload.js"),
       nodeIntegration: true,
       contextIsolation: true,
       enableRemoteModule: false
     }
   });
   
-  mainWindow.loadFile('./src/views/primaryWindow.html');
+  mainWindow.loadFile("./src/views/primaryWindow.html");
   
-  mainWindow.on('minimize', (event) => {
+  mainWindow.on("minimize", (event) => {
     event.preventDefault();
     mainWindow.hide();
   });
   
-  mainWindow.on('close', (event) => {
+  mainWindow.on("close", (event) => {
     if (!isQuitting) {
       event.preventDefault();
       mainWindow.hide();
@@ -105,7 +105,7 @@ function createMainWindow() {
     }
   });
   
-  mainWindow.on('closed', () => {
+  mainWindow.on("closed", () => {
     mainWindow = null;
   });
 }
@@ -122,39 +122,39 @@ function createSecondaryWindow() {
     maximizable: false,
     resizable: false,
     webPreferences: {
-      preload: path.join(__dirname, './src/scripts/preload.js'),
+      preload: path.join(__dirname, "./src/scripts/preload.js"),
       nodeIntegration: true,
       contextIsolation: true,
     }
   });
   
-  secondaryWin.loadFile('./src/views/secondaryWindow.html');
+  secondaryWin.loadFile("./src/views/secondaryWindow.html");
 
-  secondaryWin.on('closed', () => {
+  secondaryWin.on("closed", () => {
     secondaryWin = null;
   });
 }
 
 // Handle IPC events for window management
-ipcMain.on('minimize-window', () => {
+ipcMain.on("minimize-window", () => {
   if (mainWindow) {
     mainWindow.close();
     createSecondaryWindow();
   }
 });
 
-ipcMain.on('maximize-window', () => {
+ipcMain.on("maximize-window", () => {
   if (secondaryWin) {
     secondaryWin.close();
     createMainWindow();
   }
 });
 
-ipcMain.on('remind-me', (event, { name, day }) => {
+ipcMain.on("remind-me", (event, { name, day }) => {
   remindMe({ name, day });
 });
 
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   console.log("All windows closed, app still running in tray");
 });
 
@@ -179,7 +179,7 @@ function findSessionByName(data, sessionName, activityDay) {
   for (const activity of activities) {
     if (activity.day && activityDay && activity.day.toString().trim() === activityDay.toString().trim()) {
       for (const session of activity.sessions) {
-        console.log('Comparing session:', session.name, 'with', sessionName);
+        console.log("Comparing session:", session.name, "with", sessionName);
         if (
           typeof session.name === "string" &&
           session.name.trim().toLowerCase() === sessionName.trim().toLowerCase()
@@ -193,8 +193,8 @@ function findSessionByName(data, sessionName, activityDay) {
 }
 
 // Handle setting reminders
-ipcMain.on('set-reminder', (event, { message, alertDays, alertHours, alertMinutes, name, day }) => {
-  console.log('set-reminder called with:', name, day);
+ipcMain.on("set-reminder", (event, { message, alertDays, alertHours, alertMinutes, name, day }) => {
+  console.log("set-reminder called with:", name, day);
   const data = _data;
 
   const focusedWindow = BrowserWindow.getFocusedWindow();
@@ -203,7 +203,7 @@ ipcMain.on('set-reminder', (event, { message, alertDays, alertHours, alertMinute
 
   const result = findSessionByName(data, name, day);
   if (!result) {
-    console.error('Could not find session for reminder:', name, day);
+    console.error("Could not find session for reminder:", name, day);
     return;
   }
 
@@ -235,14 +235,14 @@ ipcMain.on('set-reminder', (event, { message, alertDays, alertHours, alertMinute
         title: `Reminder: ${name}`, 
         body: message, 
         icon: getNotificationIcon(), 
-        appID: 'ART.Timer' 
+        appID: "ART.Timer" 
       }).show();
       
-      mainWindow.webContents.send('reminder-triggered', element);
+      mainWindow.webContents.send("reminder-triggered", element);
     }, delay);
   }
 
-  mainWindow.webContents.send('reminder-added', element);
+  mainWindow.webContents.send("reminder-added", element);
   if (focusedWindow) focusedWindow.close();
 });
 
@@ -267,7 +267,7 @@ function remindMe(element) {
   const sessionDay = encodeURIComponent(element.day);
   
   reminderWindow.loadFile(
-    path.join(__dirname, './src/views/reminderWindow.html'),
+    path.join(__dirname, "./src/views/reminderWindow.html"),
     { query: { name: sessionName, day: sessionDay } }
   );
   
@@ -278,14 +278,14 @@ function remindMe(element) {
  * Schedule all reminders from configuration
  */
 function scheduleAllReminders() {
-  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+  const data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
   const activities = data.PI_1.PI_PlanningAndInnovation[0].activities;
   
   for (const activity of activities) {
     for (const session of activity.sessions) {
       if (Array.isArray(session.alerts)) {
         for (const alert of session.alerts) {
-          console.log('Found alert:', alert);
+          console.log("Found alert:", alert);
           
           if (alert.timerEnabled === "true") {
             const alertTime = new Date(alert.alertTime).getTime();
@@ -293,37 +293,37 @@ function scheduleAllReminders() {
             const delay = alertTime - now;
             
             if (delay > 0) {
-              console.log('Scheduling alert for', alertTime, 'with message:', alert.message);
+              console.log("Scheduling alert for", alertTime, "with message:", alert.message);
               
               setTimeout(() => {
-                console.log('Triggering notification:', alert.message);
+                console.log("Triggering notification:", alert.message);
                 
                 new Notification({ 
                   title: `Reminder: ${session.name}`, 
                   body: alert.message, 
                   icon: getNotificationIcon(), 
-                  appID: 'ART.Timer' 
+                  appID: "ART.Timer" 
                 }).show();
                 
                 if (mainWindow && !mainWindow.isDestroyed()) {
-                  mainWindow.webContents.send('reminder-triggered', session.name);
+                  mainWindow.webContents.send("reminder-triggered", session.name);
                 }
               }, delay);
             } else if (delay > -5 * 60 * 1000) { // If missed within last 5 minutes
-              console.log('Missed alert, triggering immediately:', alert.message);
+              console.log("Missed alert, triggering immediately:", alert.message);
               
               new Notification({ 
                 title: `Reminder: ${session.name}`, 
                 body: alert.message, 
                 icon: getNotificationIcon(), 
-                appID: 'ART.Timer' 
+                appID: "ART.Timer" 
               }).show();
               
               if (mainWindow && !mainWindow.isDestroyed()) {
-                mainWindow.webContents.send('reminder-triggered', session.name);
+                mainWindow.webContents.send("reminder-triggered", session.name);
               }
             } else {
-              console.log('Alert time is in the past:', alertTime);
+              console.log("Alert time is in the past:", alertTime);
             }
           }
         }
@@ -338,7 +338,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on('second-instance', (event, commandLine, workingDirectory) => {
+  app.on("second-instance", (event, commandLine, workingDirectory) => {
     // If a second instance is launched, show and focus the main window
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
@@ -354,7 +354,7 @@ if (!gotTheLock) {
     createTray();
     scheduleAllReminders();
     
-    app.on('activate', () => {
+    app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
         createMainWindow();
       }
@@ -367,17 +367,17 @@ if (!gotTheLock) {
   function createTray() {
     let iconPath;
     if (isPackaged) {
-      iconPath = path.join(process.resourcesPath, 'tray_icon.png');
+      iconPath = path.join(process.resourcesPath, "tray_icon.png");
     } else {
-      iconPath = path.join(__dirname, 'src/resources/static/img/tray_icon.png');
+      iconPath = path.join(__dirname, "src/resources/static/img/tray_icon.png");
     }
 
     tray = new Tray(iconPath);
-    tray.setToolTip('ART Timer');
+    tray.setToolTip("ART Timer");
 
     const contextMenu = Menu.buildFromTemplate([
       {
-        label: 'Open ART Timer',
+        label: "Open ART Timer",
         click: () => {
           if (secondaryWin) {
             secondaryWin.close(); // Close the secondary window if active
@@ -389,9 +389,9 @@ if (!gotTheLock) {
           }
         }
       },
-      { type: 'separator' },
+      { type: "separator" },
       {
-        label: 'Quit',
+        label: "Quit",
         click: () => {
           isQuitting = true;
           app.quit();
@@ -401,7 +401,7 @@ if (!gotTheLock) {
 
     tray.setContextMenu(contextMenu);
 
-    tray.on('click', () => {
+    tray.on("click", () => {
       if (secondaryWin) {
         secondaryWin.close(); // Close the secondary window if active
       }
@@ -415,8 +415,8 @@ if (!gotTheLock) {
   }
 
   // Handle showing all reminders
-  ipcMain.on('show-reminders', (event) => {
-    const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+  ipcMain.on("show-reminders", (event) => {
+    const data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
     const reminders = [];
 
     const activities = data.PI_1.PI_PlanningAndInnovation[0].activities;
@@ -440,21 +440,21 @@ if (!gotTheLock) {
       resizable: false,
       autoHideMenuBar: true,
       webPreferences: {
-        preload: path.join(__dirname, './src/scripts/preload.js'),
+        preload: path.join(__dirname, "./src/scripts/preload.js"),
         nodeIntegration: true,
         contextIsolation: true,
       }
     });
 
-    reminderWindow.loadFile('./src/views/reminderWindow.html');
+    reminderWindow.loadFile("./src/views/reminderWindow.html");
 
-    reminderWindow.webContents.once('did-finish-load', () => {
-      reminderWindow.webContents.send('load-reminders', reminders);
+    reminderWindow.webContents.once("did-finish-load", () => {
+      reminderWindow.webContents.send("load-reminders", reminders);
     });
   });
 
   // Handle showing the main window
-  ipcMain.on('show-main-window', () => {
+  ipcMain.on("show-main-window", () => {
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       mainWindow.show();

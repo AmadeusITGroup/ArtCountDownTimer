@@ -11,10 +11,10 @@
  * @returns {Element} The created SVG element
  */
 const createSVGElement = (type, attributes) => {
-    const svgNS = "http://www.w3.org/2000/svg";
-    const element = document.createElementNS(svgNS, type);
-    Object.keys(attributes).forEach(attr => element.setAttribute(attr, attributes[attr]));
-    return element;
+  const svgNS = "http://www.w3.org/2000/svg";
+  const element = document.createElementNS(svgNS, type);
+  Object.keys(attributes).forEach(attr => element.setAttribute(attr, attributes[attr]));
+  return element;
 };
 
 /**
@@ -26,11 +26,11 @@ const createSVGElement = (type, attributes) => {
  * @returns {boolean} True if the date is within the range
  */
 const isWithinDateRange = (currentDate, startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-    return currentDate >= start && currentDate <= end;
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+  return currentDate >= start && currentDate <= end;
 };
 
 /**
@@ -41,9 +41,9 @@ const isWithinDateRange = (currentDate, startDate, endDate) => {
  * @returns {Element} The created HTML element
  */
 const createElement = (type, attributes = {}) => {
-    const element = document.createElement(type);
-    Object.keys(attributes).forEach(attr => element.setAttribute(attr, attributes[attr]));
-    return element;
+  const element = document.createElement(type);
+  Object.keys(attributes).forEach(attr => element.setAttribute(attr, attributes[attr]));
+  return element;
 };
 
 /**
@@ -53,16 +53,16 @@ const createElement = (type, attributes = {}) => {
  * @returns {Element} The created session header element
  */
 const createSessionHeader = (session) => {
-    const sessionHeaderP = createElement('p', {
-        class: 'each-session-header',
-        onclick: 'remindMe(this)'
-    });
-    sessionHeaderP.textContent = session.name;
-    sessionHeaderP.appendChild(createSpanTooltipForAlert());
-    if (isAlertSet(session)) {
-        sessionHeaderP.appendChild(generateBellIconSpan());
-    }
-    return sessionHeaderP;
+  const sessionHeaderP = createElement("p", {
+    class: "each-session-header",
+    onclick: "remindMe(this)"
+  });
+  sessionHeaderP.textContent = session.name;
+  sessionHeaderP.appendChild(createSpanTooltipForAlert());
+  if (isAlertSet(session)) {
+    sessionHeaderP.appendChild(generateBellIconSpan());
+  }
+  return sessionHeaderP;
 };
 
 /**
@@ -74,29 +74,29 @@ const createSessionHeader = (session) => {
  * @returns {Element} The created countdown bar element
  */
 const createCountdownBar = (session, sessionId, sessionTimers) => {
-    const countdownBarDiv = createElement('div', {
-        class: 'countdown-bar',
-        'data-session-id': sessionId
-    });
+  const countdownBarDiv = createElement("div", {
+    class: "countdown-bar",
+    "data-session-id": sessionId
+  });
 
-    const now = new Date();
-    const start = new Date(session.startDate);
-    const end = new Date(session.endDate);
+  const now = new Date();
+  const start = new Date(session.startDate);
+  const end = new Date(session.endDate);
 
-    let duration = 100;
-    if (now >= start && now <= end) {
-        duration = calculateDurationInMinutes(now, session.endDate) * 60;
-    } else if (now < start) {
-        duration = calculateDurationInMinutes(session.startDate, session.endDate) * 60;
-    }
+  let duration = 100;
+  if (now >= start && now <= end) {
+    duration = calculateDurationInMinutes(now, session.endDate) * 60;
+  } else if (now < start) {
+    duration = calculateDurationInMinutes(session.startDate, session.endDate) * 60;
+  }
 
-    const svgElement = createCountdownSVG(duration);
-    countdownBarDiv.appendChild(svgElement);
+  const svgElement = createCountdownSVG(duration);
+  countdownBarDiv.appendChild(svgElement);
 
-    // Store session end time for live updating
-    sessionTimers[sessionId] = { countdownBarDiv, startTime: start, endTime: end };
+  // Store session end time for live updating
+  sessionTimers[sessionId] = { countdownBarDiv, startTime: start, endTime: end };
 
-    return countdownBarDiv;
+  return countdownBarDiv;
 };
 
 /**
@@ -105,16 +105,16 @@ const createCountdownBar = (session, sessionId, sessionTimers) => {
  * @returns {Object} Object containing hours and minutes remaining
  */
 function getRemainingTimeInDayIST() {
-    const istNow = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
-    const now = new Date(istNow);
-    const endOfDay = new Date(now);
-    endOfDay.setHours(23, 59, 59, 999);
-    const remainingTime = endOfDay - now;
+  const istNow = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+  const now = new Date(istNow);
+  const endOfDay = new Date(now);
+  endOfDay.setHours(23, 59, 59, 999);
+  const remainingTime = endOfDay - now;
 
-    const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+  const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+  const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
 
-    return { hours, minutes };
+  return { hours, minutes };
 }
 
 /**
@@ -125,17 +125,17 @@ function getRemainingTimeInDayIST() {
  * @returns {number} The number of working days
  */
 function calculateWorkingDays(startDate, endDate) {
-    let totalDays = 0;
-    let currentDate = new Date(startDate);
+  let totalDays = 0;
+  let currentDate = new Date(startDate);
 
-    while (currentDate <= endDate) {
-        const dayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
-        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-            totalDays++;
-        }
-        currentDate.setDate(currentDate.getDate() + 1);
+  while (currentDate <= endDate) {
+    const dayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+      totalDays++;
     }
-    return totalDays;
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return totalDays;
 }
 
 /**
@@ -146,27 +146,27 @@ function calculateWorkingDays(startDate, endDate) {
  * @returns {Object|undefined} The current ART activity or undefined
  */
 function identifyCurrentArtActivity(piPlanningAndInnovation, piIterations) {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
 
-    // Check if the current date is within the ART planning
-    const planningWeek = piPlanningAndInnovation[0];
-    if (isWithinDateRange(currentDate, planningWeek.startDate, planningWeek.endDate)) {
-        return planningWeek;
-    }
+  // Check if the current date is within the ART planning
+  const planningWeek = piPlanningAndInnovation[0];
+  if (isWithinDateRange(currentDate, planningWeek.startDate, planningWeek.endDate)) {
+    return planningWeek;
+  }
 
-    // Check if the current date is within the Innovation week
-    const innovationWeek = piPlanningAndInnovation[1];
-    if (isWithinDateRange(currentDate, innovationWeek.startDate, innovationWeek.endDate)) {
-        return innovationWeek;
-    }
+  // Check if the current date is within the Innovation week
+  const innovationWeek = piPlanningAndInnovation[1];
+  if (isWithinDateRange(currentDate, innovationWeek.startDate, innovationWeek.endDate)) {
+    return innovationWeek;
+  }
 
-    // Check if the current date is within any of the PI iterations
-    const currentIteration = piIterations.find(iteration =>
-        isWithinDateRange(currentDate, iteration.startDate, iteration.endDate)
-    );
+  // Check if the current date is within any of the PI iterations
+  const currentIteration = piIterations.find(iteration =>
+    isWithinDateRange(currentDate, iteration.startDate, iteration.endDate)
+  );
 
-    return currentIteration;
+  return currentIteration;
 }
 
 /**
@@ -176,63 +176,63 @@ function identifyCurrentArtActivity(piPlanningAndInnovation, piIterations) {
  * @returns {Element} The SVG element with countdown animation
  */
 function createCountdownSVG(duration) {
-    const rectangleHeight = 30;
-    const rectangleWidth = 300;
-    const colors = {
-        background: "white",
-        foreground: "#0C8DE8",
-        text: "white"
-    };
+  const rectangleHeight = 30;
+  const rectangleWidth = 300;
+  const colors = {
+    background: "white",
+    foreground: "#0C8DE8",
+    text: "white"
+  };
 
-    const svg = createSVGElement("svg", {
-        width: rectangleWidth,
-        height: rectangleHeight,
-        xmlns: "http://www.w3.org/2000/svg"
-    });
+  const svg = createSVGElement("svg", {
+    width: rectangleWidth,
+    height: rectangleHeight,
+    xmlns: "http://www.w3.org/2000/svg"
+  });
 
-    const backgroundRect = createSVGElement("rect", {
-        x: "0",
-        y: "0",
-        width: "100%",
-        height: "100%",
-        fill: colors.background
-    });
+  const backgroundRect = createSVGElement("rect", {
+    x: "0",
+    y: "0",
+    width: "100%",
+    height: "100%",
+    fill: colors.background
+  });
 
-    const foregroundRect = createSVGElement("rect", {
-        x: "0",
-        y: "0",
-        width: "100%",
-        height: "100%",
-        fill: colors.foreground
-    });
+  const foregroundRect = createSVGElement("rect", {
+    x: "0",
+    y: "0",
+    width: "100%",
+    height: "100%",
+    fill: colors.foreground
+  });
 
-    const animate = createSVGElement("animate", {
-        attributeName: "width",
-        from: rectangleWidth,
-        to: "0",
-        dur: `${duration}s`,
-        fill: "freeze",
-        begin: "0s"
-    });
+  const animate = createSVGElement("animate", {
+    attributeName: "width",
+    from: rectangleWidth,
+    to: "0",
+    dur: `${duration}s`,
+    fill: "freeze",
+    begin: "0s"
+  });
 
-    foregroundRect.appendChild(animate);
+  foregroundRect.appendChild(animate);
 
-    const text = createSVGElement("text", {
-        x: "50%",
-        y: "50%",
-        fill: colors.text,
-        "font-size": "18",
-        "font-weight": "bold",
-        "text-anchor": "middle",
-        "dominant-baseline": "middle"
-    });
-    text.textContent = `${new Date(duration * 1000).toISOString().substr(11, 8)} remaining`;
+  const text = createSVGElement("text", {
+    x: "50%",
+    y: "50%",
+    fill: colors.text,
+    "font-size": "18",
+    "font-weight": "bold",
+    "text-anchor": "middle",
+    "dominant-baseline": "middle"
+  });
+  text.textContent = `${new Date(duration * 1000).toISOString().substr(11, 8)} remaining`;
 
-    svg.appendChild(backgroundRect);
-    svg.appendChild(foregroundRect);
-    svg.appendChild(text);
+  svg.appendChild(backgroundRect);
+  svg.appendChild(foregroundRect);
+  svg.appendChild(text);
 
-    return svg;
+  return svg;
 }
 
 /**
@@ -243,10 +243,10 @@ function createCountdownSVG(duration) {
  * @returns {number} The duration in minutes
  */
 function calculateDurationInMinutes(startDate, endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const duration = (end - start) / 1000 / 60;
-    return duration;
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const duration = (end - start) / 1000 / 60;
+  return duration;
 }
 
 /**
@@ -255,10 +255,10 @@ function calculateDurationInMinutes(startDate, endDate) {
  * @returns {Element} The tooltip span element
  */
 function createSpanTooltipForAlert() {
-    const span = document.createElement('span');
-    span.textContent = "Click for Alert";
-    span.classList.add('tooltip');
-    return span;
+  const span = document.createElement("span");
+  span.textContent = "Click for Alert";
+  span.classList.add("tooltip");
+  return span;
 }
 
 /**
@@ -268,7 +268,7 @@ function createSpanTooltipForAlert() {
  * @returns {boolean} True if an alert is set
  */
 function isAlertSet(node) {
-    return Array.isArray(node.alerts) && node.alerts.some(alert => alert.timerEnabled === "true");
+  return Array.isArray(node.alerts) && node.alerts.some(alert => alert.timerEnabled === "true");
 }
 
 /**
@@ -277,9 +277,9 @@ function isAlertSet(node) {
  * @returns {Element} The bell icon span element
  */
 function generateBellIconSpan() {
-    const span = document.createElement('span');
-    span.textContent = "🔔";
-    return span;
+  const span = document.createElement("span");
+  span.textContent = "🔔";
+  return span;
 }
 
 /**
@@ -292,45 +292,46 @@ function generateBellIconSpan() {
  * @param {number} circleRadius - The radius of the progress circle
  */
 async function updateProgress(timerId, startDate, decrementPerDay, totalDays, circleRadius) {
-    const currentDate = new Date();
-    let elapsedDays = 0;
-    let remainingTimeInCurrentDay = { hours: 0, minutes: 0 };
-    let remainingDays = totalDays;
+  const currentDate = new Date();
+  let elapsedDays = 0;
+  let remainingTimeInCurrentDay = { hours: 0, minutes: 0 };
+  let remainingDays = totalDays;
 
-    if (currentDate > startDate) {
-        elapsedDays = calculateWorkingDays(startDate, currentDate) - 1;
-        remainingTimeInCurrentDay = getRemainingTimeInDayIST();
-        remainingDays = totalDays - elapsedDays - 1;
-    }
+  if (currentDate > startDate) {
+    elapsedDays = calculateWorkingDays(startDate, currentDate) - 1;
+    remainingTimeInCurrentDay = getRemainingTimeInDayIST();
+    remainingDays = totalDays - elapsedDays - 1;
+  }
 
-    // Calculate the remaining percentage
-    const totalRemainingTime = remainingDays * decrementPerDay +
+  // Calculate the remaining percentage
+  const totalRemainingTime = remainingDays * decrementPerDay +
         (remainingTimeInCurrentDay.hours / 24) +
         (remainingTimeInCurrentDay.minutes / (24 * 60));
-    const remainingPercentage = Math.max(totalRemainingTime, 0);
+  const remainingPercentage = Math.max(totalRemainingTime, 0);
 
-    // Update the timer display
-    const element = document.getElementById("timer" + String(timerId));
-    const circleElement = document.getElementById("progressCircle" + String(timerId));
+  // Update the timer display
+  const element = document.getElementById("timer" + String(timerId));
+  const circleElement = document.getElementById("progressCircle" + String(timerId));
 
-    element.textContent = `${remainingDays} Days ${remainingTimeInCurrentDay.hours} Hours ${remainingTimeInCurrentDay.minutes} Minutes left`;
+  element.textContent =
+    `${remainingDays} Days ${remainingTimeInCurrentDay.hours} Hours ${remainingTimeInCurrentDay.minutes} Minutes left`;
 
-    // Calculate and update progress circle
-    const circumference = 2 * Math.PI * circleRadius;
-    const dashOffset = circumference * (1 - remainingPercentage / 100);
-    circleElement.setAttribute("stroke-dasharray", `${circumference}`);
-    circleElement.setAttribute("stroke-dashoffset", `${dashOffset}`);
+  // Calculate and update progress circle
+  const circumference = 2 * Math.PI * circleRadius;
+  const dashOffset = circumference * (1 - remainingPercentage / 100);
+  circleElement.setAttribute("stroke-dasharray", `${circumference}`);
+  circleElement.setAttribute("stroke-dashoffset", `${dashOffset}`);
 }
 
 // Export the functions
 module.exports = {
-    calculateWorkingDays,
-    getRemainingTimeInDayIST,
-    identifyCurrentArtActivity,
-    createCountdownSVG,
-    calculateDurationInMinutes,
-    updateProgress,
-    createElement,
-    createSessionHeader,
-    createCountdownBar
+  calculateWorkingDays,
+  getRemainingTimeInDayIST,
+  identifyCurrentArtActivity,
+  createCountdownSVG,
+  calculateDurationInMinutes,
+  updateProgress,
+  createElement,
+  createSessionHeader,
+  createCountdownBar
 };
