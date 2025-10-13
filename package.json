@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "An Electron application for managing ART planning sessions.",
   "main": "main.js",
-  "type": "module",
   "scripts": {
     "test": "jest",
     "start": "electron main.js",
@@ -38,7 +37,10 @@
       "icon": "src/resources/static/img/icon.ico"
     }
   },
-  "author": "Vasukipriya K N",
+  "author": {
+    "name": "Vasukipriya K N",
+    "email": "vallishavasuki1@gmail.com"
+  },
   "license": "MIT",
   "keywords": [
     "electron",

@@ -1,0 +1,260 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test-release:
+    name: Build, Test, and Release (Ubuntu)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      new_version: ${{ steps.version.outputs.new_version }}
+    steps:
+      # Checkout full history for versioning and changelog
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Lint code
+      - name: Lint code
+        run: npm run lint
+
+      # Run tests
+      - name: Run tests
+        run: npm test
+
+      # Auto-increment version and tag (only on push to master)
+      - name: Auto-increment version
+        id: version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          git fetch --tags
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR="${VERSION_PARTS[0]}"
+          MINOR="${VERSION_PARTS[1]}"
+          PATCH="${VERSION_PARTS[2]}"
+          PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          while git tag | grep -q "^v$NEW_VERSION$"; do
+            PATCH=$((PATCH + 1))
+            NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          done
+          sed -i "s/\"version\": \"$CURRENT_VERSION\"/\"version\": \"$NEW_VERSION\"/" package.json
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json
+          git commit -m "Bump version to $NEW_VERSION [skip ci]"
+          git tag "v$NEW_VERSION"
+          git push
+          git push --tags
+
+      # Build Electron app for Linux targets
+      - name: Build Electron app (Linux)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --publish always --linux AppImage --linux deb
+
+      # Upload Linux build artifacts
+      - name: Upload Linux build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-build-linux
+          path: dist/
+          retention-days: 7
+
+      # Create GitHub Release and attach Linux artifacts
+      - name: Create Release
+        if: steps.version.outputs.new_version != ''
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.new_version }}
+          name: Release v${{ steps.version.outputs.new_version }}
+          draft: false
+          generate_release_notes: true
+          files: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.rpm
+            dist/*.snap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows:
+    name: Build and Release (Windows)
+    runs-on: windows-latest
+    needs: build-test-release
+    if: needs.build-test-release.outputs.new_version != ''
+    permissions:
+      contents: write
+    steps:
+      # Checkout latest code (with version bump)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Ensure latest version from Ubuntu build
+      - name: Pull latest changes (sync with Ubuntu version bump)
+        run: git pull origin master
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Cache Electron binaries
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+            C:/Users/runneradmin/AppData/Local/electron/Cache
+            C:/Users/runneradmin/AppData/Roaming/electron
+          key: ${{ runner.os }}-electron-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-cache-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Set Electron cache directory for Windows
+      - name: Set Electron cache directory
+        shell: pwsh
+        run: |
+          echo "ELECTRON_CACHE=$env:USERPROFILE\.cache\electron" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "ELECTRON_BUILDER_CACHE=$env:USERPROFILE\.cache\electron-builder" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      # Build for Windows with retry logic
+      - name: Build for Windows with retry
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $maxRetries = 5
+          $retryCount = 0
+          $succeeded = $false
+          while (-not $succeeded -and $retryCount -lt $maxRetries) {
+            try {
+              Write-Host "Attempt $($retryCount + 1) of $maxRetries"
+              npx electron-builder --windows --publish never
+              $succeeded = $true
+            } catch {
+              $retryCount++
+              if ($retryCount -lt $maxRetries) {
+                Write-Host "Build failed, retrying in 60 seconds..."
+                Write-Host "Error: $_"
+                Start-Sleep -Seconds 60
+              } else {
+                Write-Host "Build failed after $maxRetries attempts"
+                throw
+              }
+            }
+          }
+
+      # Upload Windows build artifacts
+      - name: Upload Windows build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-build-windows
+          path: dist/
+          retention-days: 7
+
+      # Attach Windows artifacts to the same release
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.build-test-release.outputs.new_version }}
+          files: |
+            dist/*.exe
+            dist/*.msi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-macos:
+    name: Build and Release (macOS)
+    runs-on: macos-latest
+    needs: build-test-release
+    if: needs.build-test-release.outputs.new_version != ''
+    permissions:
+      contents: write
+    steps:
+      # Checkout latest code (with version bump)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Ensure latest version from Ubuntu build
+      - name: Pull latest changes (sync with Ubuntu version bump)
+        run: git pull origin master
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Cache Electron binaries
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: ${{ runner.os }}-electron-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-cache-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Build for macOS
+      - name: Build Electron app (macOS Universal)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --mac --universal --publish never
+
+      # Upload macOS build artifacts
+      - name: Upload macOS build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-build-macos
+          path: dist/
+          retention-days: 7
+
+      # Attach macOS artifacts to the same release
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.build-test-release.outputs.new_version }}
+          files: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.pkg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
