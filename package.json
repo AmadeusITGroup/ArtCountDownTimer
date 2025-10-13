@@ -1,6 +1,6 @@
 {
   "name": "art-timer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An Electron application for managing ART planning sessions.",
   "main": "main.js",
   "scripts": {
