@@ -1,4 +1,4 @@
-# Table of Contents
+## Table of Contents
 - [Overview](#overview)
 - [Features](#features)
 - [Installation](#installation)
@@ -12,44 +12,39 @@
 ---
 
 ## Overview
-ART Timer is a light-weight application designed to help teams track Program Increment (PI) planning sessions, innovation sprints, and iterations. It provides visual countdown timers, custom reminders, and detailed session tracking to improve coordination during Agile events.
+ART Timer is a lightweight application designed to help teams track Program Increment (PI) planning sessions, innovation sprints, and iterations. It provides visual countdown timers, custom reminders, and detailed session tracking to improve coordination during Agile events.
 
 ---
 ## Features
-**Multiple Timer Views:**
 
+**Multiple Timer Views:**
 - Primary window with detailed PI and iteration timers
 - Minimizable secondary window for at-a-glance progress
 - System tray integration for background operation
 
 **Comprehensive Timers:**
-
 - Visual countdown displays with circular progress indicators
 - Daily updates showing remaining days, hours, and minutes
 - Session-specific timers for planning activities
-- Shows the total duration of each session.
+- Shows the total duration of each session
 
 **Reminder System:**
-
 - Set custom reminders for sessions and activities
 - Desktop notifications with customizable messages
 - Persistent reminder tracking between application restarts
 
 **Customization Options:**
-
 - Light/dark theme switching
 - Configurable planning sessions and iterations via JSON
 - Detailed session information and descriptions
 
 **User-Friendly Interface:**
-
 - Interactive session details view
 - One-click reminder creation
 - Minimizable to secondary window or system tray
 
-**Usecase:**
-
-- This utility could be used for any SAFe practices.
+**Use Case:**
+- This utility can be used for any SAFe practices
 
 ---
 ## Installation
